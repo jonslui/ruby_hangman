@@ -6,6 +6,7 @@ class Hangman
         @word_to_guess = get_word_from_dictionary(dictionary_file)
         @word_shown = []
         @guessed_letter = ""
+        @guesses_left = 6
     end
 
     def get_word_from_dictionary(dictionary_file)
@@ -16,11 +17,9 @@ class Hangman
         word_to_guess.chomp
     end
     
-    
     def display(word_shown)
         puts word_shown.join("")
-    end
-    
+    end  
     
     def player_guess
         print "Guess a letter: "
@@ -34,15 +33,18 @@ class Hangman
         player_guess.gsub(/\s+/,"")
     end
     
-    
     def check_for_letter(word, letter)
         locations = []
         word.downcase.chars.each_with_index {|char, index|
            char == letter ? locations << index : ""
         }
+        if locations == []
+            @guesses_left -= 1
+        end
+
+        self.check_for_win
         locations
     end
-    
     
     def update_word_shown(word_shown, location_of_guessed_letters, guessed_letter)
         location_of_guessed_letters.each { |index|
@@ -50,29 +52,56 @@ class Hangman
             }
         @word_shown = word_shown
     end
-    
+
+    def check_for_win
+       if @word_shown.include?(" _ ") == false
+        true
+       else
+        false
+       end
+    end
+
+    def still_have_guesses?
+        if @guesses_left > 0
+            true
+        else
+            false
+        end
+    end
 
 end
 
 class Player
 
+
 end
+
+
+
+
+
+
+
+
+
 
 
 dictionary_file = File.open('5desk.txt').to_a
 save_state = File.open('savestate.txt', 'w')
 
-guesses_left = 6
-
-
-
+# initialize game
 currentGame = Hangman.new(dictionary_file)
 puts currentGame.word_to_guess
 currentGame.word_to_guess.length.times { currentGame.word_shown << " _ "}
 currentGame.display(currentGame.word_shown)
 
-# # gameplay loop below
+
+
+# # gameplay loop
+while currentGame.check_for_win() == false && currentGame.still_have_guesses? == true
 guessed_letter = currentGame.player_guess()
 location_of_guessed_letters = currentGame.check_for_letter(currentGame.word_to_guess, guessed_letter)
 currentGame.update_word_shown(currentGame.word_shown, location_of_guessed_letters, guessed_letter)
 currentGame.display(currentGame.word_shown)
+end
+
