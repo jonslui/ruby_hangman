@@ -1,0 +1,17 @@
+--- !ruby/object:Hangman
+word_to_guess: economizer
+word_shown:
+- e
+- c
+- " _ "
+- " _ "
+- " _ "
+- " _ "
+- " _ "
+- " _ "
+- e
+- " _ "
+incorrect_guesses:
+- f
+- a
+guesses_left: 4
