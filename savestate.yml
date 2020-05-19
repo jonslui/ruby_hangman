@@ -1,17 +1,14 @@
 --- !ruby/object:Hangman
-word_to_guess: economizer
+word_to_guess: unheated
 word_shown:
+- " _ "
+- " _ "
+- " _ "
 - e
-- c
-- " _ "
-- " _ "
-- " _ "
-- " _ "
-- " _ "
+- a
 - " _ "
 - e
 - " _ "
 incorrect_guesses:
 - f
-- a
-guesses_left: 4
+guesses_left: 5

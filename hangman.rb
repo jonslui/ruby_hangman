@@ -32,6 +32,8 @@ class Hangman
         while player_guess.match?(/[A-Z]/i) == false || player_guess.length != 1
             print "Guess a letter: "
             player_guess = gets.downcase.chomp
+            puts " "
+
         end
         
         player_guess.gsub(/\s+/,"")
@@ -63,6 +65,8 @@ class Hangman
        if @word_shown.include?(" _ ") == false
         # delete savestate if player wins
         File.delete('savestate.yml')
+        puts " "
+        puts "You won!"
         true
        else
         false
@@ -73,24 +77,23 @@ class Hangman
         if @guesses_left > 0
             true
         else
+            puts " "
+            puts "Better luck next time!"
+            puts "The correct word was #{@word_to_guess}"
+
+            # delete savestate if player loses
+            File.delete('savestate.yml')
             false
         end
     end
 
 end
 
-class Player
-
-
-end
-
-
-
 
 
 dictionary_file = File.open('5desk.txt').to_a
 
-# initialize game
+# initializing game
 if File.exist?('savestate.yml')
     print "Do you want to reload your last game? Y/N: "
     replay = gets.chomp
@@ -101,13 +104,10 @@ if replay != nil && replay.downcase == "y"
     currentGame.display(currentGame.word_shown)
 else
     currentGame = Hangman.new(dictionary_file)
-    puts currentGame.word_to_guess
+    # puts currentGame.word_to_guess
     currentGame.word_to_guess.length.times { currentGame.word_shown << " _ "}
     currentGame.display(currentGame.word_shown)
 end
-
-
-
 
 
 # # gameplay loop
@@ -118,11 +118,3 @@ while currentGame.check_for_win() == false && currentGame.still_have_guesses? ==
     currentGame.display(currentGame.word_shown)
     File.open('savestate.yml','w'){|file| file.write(currentGame.to_yaml)}
 end
-
-# implement save state
-# record 
-    # @word_to_guess = get_word_from_dictionary(dictionary_file)
-    # @word_shown = []
-    # @previously_guessed = []
-    # @guesses_left = 6
-
